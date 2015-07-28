@@ -1,6 +1,6 @@
 # About
 
-hashicorp consul is amazing, but it's default handling of failed nodes is appalling.
+hashicorp consul is amazing, but its default handling of failed nodes is appalling.
 This script takes a list of valid nodes ( space separated ).
 Compares the failed ones from consul to list of valid nodes and issues force-leave command only to the ones which are not valid.
 
@@ -39,5 +39,3 @@ or :
     Removed 10.11.32.104
     Removed 10.11.41.246
     Removed 10.11.72.45
-
-
