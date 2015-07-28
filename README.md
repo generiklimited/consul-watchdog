@@ -1,3 +1,12 @@
+# About
+
+hashicorp consul is amazing, but it's default handling of failed nodes is appalling.
+This script takes a list of valid nodes ( space separated ).
+Compares the failed ones from consul to list of valid nodes and issues force-leave command only to the ones which are not valid.
+
+We generate the list of valid nodes from AWS instances and feed it on stdin to watchdog as per example.
+
+
 ## Usage
 
     usage: consul-watchdog [-h] [--url URL] [--status STATUS] [--input INPUT]
@@ -18,7 +27,7 @@
 
 Example : 
 
-     python get-stack-instances.py --region eu-west-1 --location prod-eu-west-1 --envid a | python consul-watchdog
+     python get-stack-instances.py --region eu-west-1 | python consul-watchdog
 
 
 or : 
