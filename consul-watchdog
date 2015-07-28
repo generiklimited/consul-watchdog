@@ -1,0 +1,21 @@
+#!/usr/bin/python
+# Author: Mateusz Pawlowski <mateusz@generik.co.uk>
+# License: GPL-2
+
+import requests
+import json
+
+url = "http://localhost:8500/v1/agent/members"
+#failed
+status = 4
+failed_nodes = []
+r = requests.get(url)
+
+doc =  r.json()
+
+for node in doc:
+        if node["Status"] == status:
+                failed_nodes.append(node["Addr"])
+
+
+
