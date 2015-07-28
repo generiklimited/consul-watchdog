@@ -22,6 +22,7 @@ Example :
 
 
 or : 
+
     echo 10.11.68.52 10.11.43.107 | python consul-watchdog --debug
     Valid: 2
     Failed: 6
