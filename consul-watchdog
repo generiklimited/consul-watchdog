@@ -4,18 +4,46 @@
 
 import requests
 import json
+import argparse
+import sys
 
-url = "http://localhost:8500/v1/agent/members"
+
+parser = argparse.ArgumentParser(description='Cleans up members of a Consul Cluster.')
+
+parser.add_argument('--url', type=str,  default="http://localhost:8500", help='Consul Members Endpoint')
+parser.add_argument('--status', type=int,  default=4, help='Consul Member Status for eviction')
+parser.add_argument('--input', type=open,   help='File with valid hosts, without list is read from stdin')
+parser.add_argument('--debug', action='store_true',    help='Debug information output')
+
+
+valid_input = sys.stdin
+args = parser.parse_args()
+
+if args.input: 
+    valid_input = args.input
+
+valid_nodes = filter( None, str(valid_input.read().rstrip()).split(" ") )
+
 #failed
-status = 4
 failed_nodes = []
-r = requests.get(url)
+members_request = requests.get(args.url + "/v1/agent/members")
 
-doc =  r.json()
+members =  members_request.json()
 
-for node in doc:
-        if node["Status"] == status:
+for node in members:
+        if node["Status"] == args.status:
                 failed_nodes.append(node["Addr"])
 
 
+missing_nodes =  list(set(failed_nodes) - set( valid_nodes))
 
+if args.debug:
+    print "Valid: %i"%len(valid_nodes)
+    print "Failed: %i"%len(failed_nodes)
+    print "Missing: %i"%len(missing_nodes)
+
+
+for missing_node in missing_nodes:
+    force_leave_request = requests.get(args.url + "/v1/agent/force-leave/%s"%missing_node)
+    if args.debug:
+        print "Removed %s"%missing_node
