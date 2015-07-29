@@ -9,7 +9,7 @@ We generate the list of valid nodes from AWS instances and feed it on stdin to w
 
 ## Usage
 
-   usage: consul-watchdog [-h] [--url URL] [--status STATUS] [--input INPUT] [--debug] [--dryrun]
+      usage: consul-watchdog [-h] [--url URL] [--status STATUS] [--input INPUT] [--debug] [--dryrun]
 
               Cleans up members of a Consul Cluster.
 
@@ -44,4 +44,4 @@ or :
 
 The container is only doing dryrun by default with ```ENV WATCHDOG_OPTS "--dryrun --debug"``` , you need to reset it to other value when runing for example : 
 
-   docker run -e WATCHDOG_OPTS='--debug' consul-watchdog
+      docker run -e WATCHDOG_OPTS='--debug' consul-watchdog
