@@ -14,6 +14,7 @@ parser.add_argument('--url', type=str,  default="http://localhost:8500", help='C
 parser.add_argument('--status', type=int,  default=4, help='Consul Member Status for eviction')
 parser.add_argument('--input', type=open,   help='File with valid hosts, without list is read from stdin')
 parser.add_argument('--debug', action='store_true',    help='Debug information output')
+parser.add_argument('--dryrun', action='store_true',    help='Do not remove the nodes, just pretend')
 
 
 valid_input = sys.stdin
@@ -24,7 +25,6 @@ if args.input:
 
 valid_nodes = filter( None, str(valid_input.read().rstrip()).split(" ") )
 
-#failed
 failed_nodes = []
 members_request = requests.get(args.url + "/v1/agent/members")
 
@@ -44,6 +44,7 @@ if args.debug:
 
 
 for missing_node in missing_nodes:
-    force_leave_request = requests.get(args.url + "/v1/agent/force-leave/%s"%missing_node)
+    if not args.dryrun:
+        force_leave_request = requests.get(args.url + "/v1/agent/force-leave/%s"%missing_node)
     if args.debug:
         print "Removed %s"%missing_node
